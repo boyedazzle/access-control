@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">AccessControl</string>
+
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Sign In</string>
+    <string name="logout">Log Out</string>
+
+
+    <string name="string"> Click refresh to load more names (*Optional)</string>
+    <string name="refreshapp">Click Refresh  to load application(s)</string>
+
+    <string name="refresh">Refresh Staff List</string>
+    <string name="refresh_app">Refresh</string>
+    <string name="launch_app">Open</string>
+    <string name="update">Update</string>
+    <string name="update_available">Update Available</string>
+    <string name="download">Download</string>
+
+    <string name="appname_display">Access Control</string>
+    <string name="username_placeholder">Type username here</string>
+    <string name="password_placeholder">Type password here</string>
+    <string name="footer">Enterprise Systems 2019</string>
+    <string name="view_report">View Direct Reports</string>
+    <string name="title_activity_version_control">VersionControl</string>
+    <string name="resolved">Close Issue</string>
+    <string name="no_records">No Records, Click the button below to refresh</string>
+    <string name="last5Digits">Type last 5 digits of your staff id</string>
+    <string name="idSignIn">Staff ID Sign In</string>
+
+
+</resources>

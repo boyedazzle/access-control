@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="@color/text_color_silver"
+    android:orientation="vertical"
+    tools:context="com.babbangona.accesscontrol.ApplicationDetails">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:background="@color/colorPrimary" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/text_color_silver">
+
+                <TextView
+                    android:id="@+id/staff_info"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginTop="0dp"
+                    android:fontFamily="@font/roboto"
+                    android:gravity="center"
+                    android:text="Adeniran Adebayo"
+
+
+                    android:textColor="@color/text_color_black"
+                    android:textSize="18sp" />
+                <TextView
+                    android:id="@+id/staff_id"
+                    android:layout_width="match_parent"
+                    android:fontFamily="@font/roboto"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="0dp"
+
+                    android:gravity="center"
+                    android:text="T-1000000000000550"
+                    android:paddingLeft="10dp"
+
+
+                    android:textColor="@color/text_color_black"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:weightSum="1.0"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <android.support.v7.widget.CardView
+                        android:layout_width="120dp"
+                        android:elevation="5dp"
+                        android:layout_gravity="center"
+                        android:translationZ="5dp"
+
+                        android:onClick="Refresh"
+
+                        app:cardCornerRadius="7dp"
+
+                        android:layout_height="25dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:background="@drawable/view_looks_button"
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:textSize="17dp"
+                                android:fontFamily="@font/roboto"
+                                android:text="@string/refresh_app"
+                                android:textColor="@color/text_color_black"
+                                />
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="120dp"
+                        android:elevation="5dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_gravity="center"
+                        android:translationZ="5dp"
+                        android:onClick="Logout"
+
+                        android:backgroundTint="@color/text_color_black"
+                        app:cardCornerRadius="7dp"
+
+                        android:layout_height="25dp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+
+                            android:layout_height="match_parent">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:fontFamily="@font/roboto"
+                                android:text="@string/logout"
+                                android:textColor="@color/text_color_white"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </android.support.v7.widget.CardView>
+
+
+
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/roboto"
+                    android:textColor="@color/text_color_red"
+                    android:text="@string/refreshapp"
+                    android:gravity="center"
+
+                    />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:elevation="5dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_gravity="center"
+                    android:translationZ="5dp"
+                    android:onClick="DirectReport"
+
+                    android:backgroundTint="@color/text_color_black"
+                    app:cardCornerRadius="7dp"
+
+                    android:layout_height="25dp">
+                    <LinearLayout
+                        android:layout_width="match_parent"
+
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:fontFamily="@font/roboto"
+                            android:text="@string/view_report"
+                            android:textColor="@color/text_color_white"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/profile_component" />
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1.0"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recylcerView2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.9"
+        android:layout_marginTop="10dp"
+        tools:layout_editor_absoluteX="745dp"
+        tools:layout_editor_absoluteY="-51dp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/text_color_black"
+        android:gravity="center"
+        android:layout_weight="0.1"
+        android:text="njdfvaidsfvdiofv"
+        android:textColor="@color/text_color_white"
+        android:textSize="12sp"
+        android:id="@+id/access_control_version"/>
+
+</LinearLayout>
+
+
+
+
+</LinearLayout>
