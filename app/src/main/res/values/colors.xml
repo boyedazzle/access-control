@@ -13,6 +13,19 @@
     <color name="text_color_red">#ff0000</color>
     <color name="tabbed_text_color">#CfCfff</color>
 
+    <color name="background">#FAFAFA</color>
+    <color name="colorError">#F44336</color>
+    <color name="colorOnBackground">#212121</color>
+    <color name="colorOnError">#FFFFFF</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSecondary">#FFFFFF</color>
+    <color name="colorOnSurface">#212121</color>
+
+    <color name="colorPrimaryVariant">#000000</color>
+    <color name="colorSecondary">#2962FF</color>
+    <color name="colorSecondaryVariant">#0039CB</color>
+    <color name="colorSurface">#FFFFFF</color>
+
 
     <color name="Maroon">#800000</color>
     <color name="Aquamarine">#7FFFD4</color>

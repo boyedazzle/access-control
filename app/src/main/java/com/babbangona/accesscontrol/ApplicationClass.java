@@ -10,6 +10,7 @@ public class ApplicationClass {
         private String staff_id;
         private String staff_name;
         private String staff_role;
+        private String staff_program;
         private String hub;
         private String download_version;
         private String new_version;
@@ -17,7 +18,9 @@ public class ApplicationClass {
         private String app_version;
 
 
-        public ApplicationClass(String app_name, String package_name, String status, String staff_id, String staff_name,String download_version,String new_version,String what_new, String staff_role,String hub,String app_version) {
+
+
+    public ApplicationClass(String app_name, String package_name, String status, String staff_id, String staff_name, String download_version, String new_version, String what_new, String staff_role, String hub, String app_version, String staff_program) {
 
             this.app_name = app_name;
             this.package_name = package_name;
@@ -30,6 +33,7 @@ public class ApplicationClass {
             this.staff_role = staff_role;
             this.hub = hub;
             this.app_version = app_version;
+            this.staff_program = staff_program;
         }
 
         public String getAppName() {
@@ -47,9 +51,9 @@ public class ApplicationClass {
         public String getNew_version(){return  new_version;}
         public String getWhat_new(){return  what_new;}
         public String getStaff_role(){return staff_role;}
-       public String getStaff_hub(){return hub;}
-       public String getApp_version(){return app_version;}
-
+        public String getStaff_hub(){return hub;}
+        public String getApp_version(){return app_version;}
+        public String getStaff_program() { return staff_program; }
 
 
 

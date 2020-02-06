@@ -1,40 +1,31 @@
 package com.babbangona.accesscontrol;
 
 
-
 import android.annotation.SuppressLint;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Environment;
 import android.os.PowerManager;
-
-
-import android.support.v4.content.FileProvider;
-import android.support.v7.widget.RecyclerView;
-import android.util.Base64;
+import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,7 +43,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 
 public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.ProductViewHolder> {
@@ -64,7 +54,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     ControlDB controlDB;
     DownloadTask downloadTask;
     String online_status;
-    int download_version,new_version;
+    int download_version, new_version;
 
     private static final int PERMISSION_REQUEST_CODE = 1;
     SessionManagement sessionManagement;
@@ -90,52 +80,52 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
     @SuppressLint("SetTextI18n")
 
     public void onBindViewHolder(final ProductViewHolder holder, final int position) {
-         applicationClass= productList.get(position);
-         online_status = applicationClass.getStatus();
-         download_version = Integer.parseInt(applicationClass.getDownload_version());
+        applicationClass = productList.get(position);
+        online_status = applicationClass.getStatus();
+        download_version = Integer.parseInt(applicationClass.getDownload_version());
 
 
-         holder.D_app_name.setText("");
-         //holder.D_staff_id.setText("");
-         holder.hidden.setText("");
+        holder.D_app_name.setText("");
+        //holder.D_staff_id.setText("");
+        holder.hidden.setText("");
         holder.D_status.setText("");
         holder.app_version.setText("");
-         try {
-             new_version = Integer.parseInt(applicationClass.getNew_version());
-         }catch (Exception e){}
+        try {
+            new_version = Integer.parseInt(applicationClass.getNew_version());
+        } catch (Exception e) {
+
+        }
 
 
-        if(download_version == 1) holder.download.setVisibility( View.INVISIBLE);
-        else if(download_version == 0) holder.download.setVisibility( View.VISIBLE);
+        if (download_version == 1) holder.download.setVisibility(View.INVISIBLE);
+        else if (download_version == 0) holder.download.setVisibility(View.VISIBLE);
 
-     //Log.d("PARSE 1","     "+download_version+"     "+pack);
+        //Log.d("PARSE 1","     "+download_version+"     "+pack);
 
 
-        if(download_version == 0 && (new_version - download_version)>0) holder.update.setVisibility( View.INVISIBLE);
+        if (download_version == 0 && (new_version - download_version) > 0)
+            holder.update.setVisibility(View.INVISIBLE);
 
-        else if(new_version - download_version ==0){
+        else if (new_version - download_version == 0) {
             holder.download.setVisibility(View.INVISIBLE);
             holder.update.setVisibility(View.INVISIBLE);
-        }
+        } else if (download_version > 0 && (new_version - download_version) > 0) {
+            holder.update.setVisibility(View.VISIBLE);
+            holder.download.setVisibility(View.VISIBLE);
+            holder.download.setText(mCtx.getResources().getString(R.string.update));
+        } else if ((new_version - download_version) <= 0) holder.update.setVisibility(View.GONE);
 
-     else if(download_version > 0 && (new_version - download_version)>0){
-         holder.update.setVisibility( View.VISIBLE);
-         holder.download.setVisibility(View.VISIBLE);
-          holder.download.setText(mCtx.getResources().getString(R.string.update));}
-     else if((new_version - download_version)<=0) holder.update.setVisibility( View.GONE);
-
-        if(Integer.parseInt(online_status)==1){
-            holder.D_status.setText(holder.D_status.getText()+""+"ACTIVE");
+        if (Integer.parseInt(online_status) == 1) {
+            holder.D_status.setText(holder.D_status.getText() + "" + "ACTIVE");
             holder.D_status.setTextColor(Color.parseColor("#008000"));
-        }
-        else{
-            holder.D_status.setText(holder.D_status.getText()+""+"INACTIVE");
+        } else {
+            holder.D_status.setText(holder.D_status.getText() + "" + "INACTIVE");
             holder.D_status.setTextColor(Color.parseColor("#ff0000"));
         }
 
-        holder.D_app_name.setText(holder.D_app_name.getText()+applicationClass.getAppName());
-        holder.hidden.setText(holder.hidden.getText()+""+applicationClass.getAppName());
-        holder.app_version.setText(holder.app_version.getText()+applicationClass.getApp_version());
+        holder.D_app_name.setText(holder.D_app_name.getText() + applicationClass.getAppName());
+        holder.hidden.setText(holder.hidden.getText() + "" + applicationClass.getAppName());
+        holder.app_version.setText(holder.app_version.getText() + applicationClass.getApp_version());
 
 
         holder.update.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +137,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 String what_new = controlDB.what_new(package_name);
 
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(mCtx);
-                builder1.setTitle("NEW UPDATE FOR: "+holder.hidden.getText().toString().trim());
+                builder1.setTitle("NEW UPDATE FOR: " + holder.hidden.getText().toString().trim());
                 builder1.setIcon(R.drawable.company_logo);
                 builder1.setMessage(what_new);
                 builder1.setCancelable(true);
@@ -172,49 +162,42 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
             public void onClick(View view) {
 
 
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
+
+                alertDialog.setTitle("Access Control");
+                alertDialog.setMessage("Are you sure you want to download this application ? ");
+                alertDialog.setIcon(R.drawable.component_babbangona_logo);
+
+                alertDialog.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                Toast.makeText(mCtx, "Download Manager is preparing to download", Toast.LENGTH_SHORT).show();
+
+                                controlDB = ControlDB.getInstance(mCtx);
+                                controlDB.open();
+                                String download_link = controlDB.download_link(holder.hidden.getText().toString().trim());
+                                String package_name = controlDB.package_name(holder.hidden.getText().toString().trim());
 
 
+                                downloadTask = new DownloadTask(mCtx);
+                                downloadTask.execute(download_link, package_name, holder.D_app_name.getText().toString().trim());
+
+                            }
+                        }
+                );
+                alertDialog.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        }
+                );
 
 
-
-                        AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
-
-                        alertDialog.setTitle("Access Control");
-                        alertDialog.setMessage("Are you sure you want to download this application ? ");
-                        alertDialog.setIcon(R.drawable.component_babbangona_logo);
-
-                        alertDialog.setPositiveButton(
-                                "Yes",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-
-                                        Toast.makeText(mCtx, "Download Manager is preparing to download", Toast.LENGTH_SHORT).show();
-
-                                        controlDB = ControlDB.getInstance(mCtx);
-                                        controlDB.open();
-                                        String download_link = controlDB.download_link(holder.hidden.getText().toString().trim());
-                                        String package_name = controlDB.package_name(holder.hidden.getText().toString().trim());
-
-
-                                        downloadTask = new DownloadTask(mCtx);
-                                        downloadTask.execute(download_link,package_name,holder.D_app_name.getText().toString().trim());
-
-                                    }
-                                }
-                        );
-                        alertDialog.setNegativeButton(
-                                "No",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.dismiss();
-                                    }
-                                }
-                        );
-
-
-
-
-                        alertDialog.show();
+                alertDialog.show();
 
 
             }
@@ -229,205 +212,194 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 final String package_name = controlDB.package_name(holder.hidden.getText().toString().trim());
 
 
-                final String res =  controlDB.status_by_packagename(package_name);
+                final String res = controlDB.status_by_packagename(package_name);
 
-                     if(res.trim().equalsIgnoreCase("0")){
-                        AlertDialog.Builder builder1 = new AlertDialog.Builder(mCtx);
-                        builder1.setTitle("ACCESS REVOKED");
-                        builder1.setIcon(R.drawable.company_logo);
-                        builder1.setMessage("You cannot open this application, contact enterprise system administrator for more info");
-                        builder1.setCancelable(true);
+                if (res.trim().equalsIgnoreCase("0")) {
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(mCtx);
+                    builder1.setTitle("ACCESS REVOKED");
+                    builder1.setIcon(R.drawable.company_logo);
+                    builder1.setMessage("You cannot open this application, contact enterprise system administrator for more info");
+                    builder1.setCancelable(true);
 
-                        builder1.setNeutralButton(
-                                "CLOSE",
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                            dialog.dismiss();
-                                    }
-                                });
+                    builder1.setNeutralButton(
+                            "CLOSE",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.dismiss();
+                                }
+                            });
 
-                        AlertDialog alert11 = builder1.create();
-                        alert11.show();
+                    AlertDialog alert11 = builder1.create();
+                    alert11.show();
 
+                } else if (res.trim().equalsIgnoreCase("1")) {
+
+                    PackageInfo packageInfo = null;
+                    try {
+                        SessionManagement sessionManagement = new SessionManagement(mCtx);
+                        HashMap<String, String> user = sessionManagement.getUserDetails();
+                        String staff_id = user.get(SessionManagement.KEY_STAFF_ID);
+
+                        packageInfo = mCtx.getPackageManager().getPackageInfo(package_name, 0);
+                        AppVersionDatabaseController.DatabaseHelper appVersionDatabaseController = new AppVersionDatabaseController.DatabaseHelper(mCtx);
+                        appVersionDatabaseController.InsertVersionRecords(package_name, packageInfo.versionName, staff_id);
+
+                    } catch (PackageManager.NameNotFoundException e) {
+                        SessionManagement sessionManagement = new SessionManagement(mCtx);
+                        HashMap<String, String> user = sessionManagement.getUserDetails();
+                        String staff_id = user.get(SessionManagement.KEY_STAFF_ID);
+
+
+                        AppVersionDatabaseController.DatabaseHelper appVersionDatabaseController = new AppVersionDatabaseController.DatabaseHelper(mCtx);
+                        appVersionDatabaseController.InsertVersionRecords(package_name, "0.0.0", staff_id);
                     }
-                    else if (res.trim().equalsIgnoreCase("1")) {
 
-                         PackageInfo packageInfo = null;
-                         try {
-                             SessionManagement sessionManagement = new SessionManagement(mCtx);
-                             HashMap<String,String> user = sessionManagement.getUserDetails();
-                             String staff_id = user.get(SessionManagement.KEY_STAFF_ID);
+                    try {
+                        @SuppressLint("StaticFieldLeak") SyncData.AnalyseVersions downloadApplication = new SyncData.AnalyseVersions(mCtx) {
+                            @Override
+                            protected void onPostExecute(String s) {
+                                if (s.trim().equalsIgnoreCase("outdated")) {
 
-                             packageInfo = mCtx.getPackageManager().getPackageInfo(package_name, 0);
-                             AppVersionDatabaseController.DatabaseHelper appVersionDatabaseController = new AppVersionDatabaseController.DatabaseHelper(mCtx);
-                             appVersionDatabaseController.InsertVersionRecords(package_name,packageInfo.versionName,staff_id);
-
-                         } catch (PackageManager.NameNotFoundException e) {
-                             SessionManagement sessionManagement = new SessionManagement(mCtx);
-                             HashMap<String,String> user = sessionManagement.getUserDetails();
-                             String staff_id = user.get(SessionManagement.KEY_STAFF_ID);
+                                    String res1 = controlDB.getAppDate(package_name);
+                                    Log.d("DATE_EXPIRE", res1);
+                                    String LaunchDate;
 
 
-                             AppVersionDatabaseController.DatabaseHelper appVersionDatabaseController = new AppVersionDatabaseController.DatabaseHelper(mCtx);
-                             appVersionDatabaseController.InsertVersionRecords(package_name,"0.0.0",staff_id);
-                         }
-
-                         try {
-                             @SuppressLint("StaticFieldLeak") SyncData.AnalyseVersions downloadApplication = new SyncData.AnalyseVersions(mCtx){
-                                 @Override
-                                 protected void onPostExecute(String s){
-                                     if(s.trim().equalsIgnoreCase("outdated")){
-
-                                         String res1 = controlDB.getAppDate(package_name);
-                                         Log.d("DATE_EXPIRE",res1);
-                                         String LaunchDate;
+                                    try {
 
 
-                                         try {
+                                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+                                        Date date = format.parse(res1);
+                                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yy");
+                                        LaunchDate = simpleDateFormat.format(date);
+                                        Date date3 = new SimpleDateFormat("MM/dd/yy").parse(LaunchDate);
+                                        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
+                                        Date date1 = new Date();
+                                        dateFormat.format(date1);
+
+                                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
+                                        Calendar c = Calendar.getInstance();
+                                        c.setTime(date1); // Now use today date.
+                                        c.add(Calendar.DATE, -3); // Adding 5 days
+                                        String output = sdf.format(c.getTime());
+
+                                        Date date2 = new SimpleDateFormat("MM/dd/yy").parse(output);
+
+                                        if (date2.after(date3)) {
+
+                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
+                                            alertDialog.setTitle("Access Control");
+                                            alertDialog.setMessage("This application is outdated, update to version '" + holder.app_version.getText().toString() + "'");
+                                            alertDialog.setIcon(R.drawable.component_babbangona_logo);
+                                            alertDialog.show();
+
+                                        } else {
+
+                                            SimpleDateFormat sdf1 = new SimpleDateFormat("EE dd,MMM yyyy");
+                                            Calendar c1 = Calendar.getInstance();
+                                            c1.setTime(date); // Now use today date.
+                                            c1.add(Calendar.DATE, +3); // Adding 5 days
+                                            String output1 = sdf1.format(c1.getTime());
 
 
-                                             SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
+                                            alertDialog.setTitle("Access Control");
+                                            alertDialog.setMessage("This application is outdated , ensure you update to version '" + holder.app_version.getText().toString() + "' by " + output1);
+                                            alertDialog.setIcon(R.drawable.component_babbangona_logo);
+                                            alertDialog.setPositiveButton(
+                                                    "Continue",
+                                                    new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int which) {
 
-                                             Date date = format.parse(res1);
-                                             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yy");
-                                             LaunchDate = simpleDateFormat.format(date);
-                                             Date date3=new SimpleDateFormat("MM/dd/yy").parse(LaunchDate);
-                                             DateFormat dateFormat = new SimpleDateFormat("MM/dd/yy");
-                                             Date date1 = new Date();
-                                             dateFormat.format(date1);
+                                                            try {
+                                                                AppVersionDatabaseController.DatabaseHelper databaseHelper = new AppVersionDatabaseController.DatabaseHelper(context);
+                                                                databaseHelper.LastOpened(package_name);
 
-                                             SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
-                                             Calendar c = Calendar.getInstance();
-                                             c.setTime(date1); // Now use today date.
-                                             c.add(Calendar.DATE, -3); // Adding 5 days
-                                             String output = sdf.format(c.getTime());
-
-                                             Date date2=new SimpleDateFormat("MM/dd/yy").parse(output);
-
-                                             if(date2.after(date3)){
-
-
-
-
-                                                 AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
-                                                 alertDialog.setTitle("Access Control");
-                                                 alertDialog.setMessage("This application is outdated, update to version '"+holder.app_version.getText().toString()+"'");
-                                                 alertDialog.setIcon(R.drawable.component_babbangona_logo);
-                                                 alertDialog.show();
-
-                                             }else{
-
-                                                 SimpleDateFormat sdf1 = new SimpleDateFormat("EE dd,MMM yyyy");
-                                                 Calendar c1 = Calendar.getInstance();
-                                                 c1.setTime(date); // Now use today date.
-                                                 c1.add(Calendar.DATE, +3); // Adding 5 days
-                                                 String output1 = sdf1.format(c1.getTime());
+                                                                Intent intent1 = new Intent(Intent.ACTION_MAIN);
+                                                                intent1.putExtra("staff_name", applicationClass.getStaffName());
+                                                                intent1.putExtra("staff_id", applicationClass.getStaffId());
+                                                                intent1.putExtra("staff_role", applicationClass.getStaff_role());
+                                                                intent1.putExtra("fpf_id", applicationClass.getStaffId());
+                                                                intent1.putExtra("staff_hub", applicationClass.getStaff_hub());
+                                                                intent1.putExtra("module", "access_control");
+                                                                intent1.putExtra("app_version", applicationClass.getApp_version());
+                                                                intent1.putExtra("staff_program", applicationClass.getStaff_program());
+                                                                intent1.setComponent(new ComponentName(package_name, package_name + ".Main2Activity"));
+                                                                intent1.putExtra("launch", "start");
+                                                                intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                                                mCtx.startActivity(intent1);
+                                                            } catch (Exception e) {
+                                                                Toast.makeText(mCtx, "This application is not installed on this phone", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        }
+                                                    }
+                                            );
 
 
-                                                 AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
-                                                 alertDialog.setTitle("Access Control");
-                                                 alertDialog.setMessage("This application is outdated , ensure you update to version '"+holder.app_version.getText().toString()+"' by "+output1);
-                                                 alertDialog.setIcon(R.drawable.component_babbangona_logo);
-                                                 alertDialog.setPositiveButton(
-                                                         "Continue",
-                                                         new DialogInterface.OnClickListener() {
-                                                             public void onClick(DialogInterface dialog, int which) {
+                                            alertDialog.show();
+                                        }
 
-                                                                 try {
-                                                                     AppVersionDatabaseController.DatabaseHelper databaseHelper = new AppVersionDatabaseController.DatabaseHelper(context);
-                                                                     databaseHelper.LastOpened(package_name);
-
-                                                                     Intent intent1 = new Intent(Intent.ACTION_MAIN);
-                                                                     intent1.putExtra("staff_name", applicationClass.getStaffName());
-                                                                     intent1.putExtra("staff_id", applicationClass.getStaffId());
-                                                                     intent1.putExtra("staff_role", applicationClass.getStaff_role());
-                                                                     intent1.putExtra("fpf_id", applicationClass.getStaffId());
-                                                                     intent1.putExtra("staff_hub", applicationClass.getStaff_hub());
-                                                                     intent1.putExtra("module", "access_control");
-                                                                     intent1.putExtra("app_version", applicationClass.getApp_version());
-
-                                                                     intent1.setComponent(new ComponentName(package_name, package_name + ".Main2Activity"));
-                                                                     intent1.putExtra("launch", "start");
-                                                                     intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                                                     mCtx.startActivity(intent1);
-                                                                 }catch (Exception e){
-                                                                     Toast.makeText(mCtx, "This application is not installed on this phone", Toast.LENGTH_SHORT).show();
-                                                                 }
-                                                             }
-                                                         }
-                                                 );
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
 
 
+                                } else if (s.trim().equalsIgnoreCase("corrupted")) {
+
+                                    try {
+                                        PackageInfo packageInfo = mCtx.getPackageManager().getPackageInfo(package_name, 0);
+                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
+                                        alertDialog.setTitle("Access Control");
+                                        alertDialog.setMessage("This application version '" + packageInfo.versionName + "' is not a standard application version, contact Enterprise Systems");
+                                        alertDialog.setIcon(R.drawable.component_babbangona_logo);
+
+                                        alertDialog.show();
+
+                                    } catch (PackageManager.NameNotFoundException e) {
+                                        e.printStackTrace();
+                                    }
 
 
-                                                 alertDialog.show();
-                                             }
+                                } else {
+                                    try {
+                                        AppVersionDatabaseController.DatabaseHelper databaseHelper = new AppVersionDatabaseController.DatabaseHelper(context);
+                                        databaseHelper.LastOpened(package_name);
+                                        Intent intent1 = new Intent(Intent.ACTION_MAIN);
+                                        intent1.putExtra("staff_name", applicationClass.getStaffName());
+                                        intent1.putExtra("staff_id", applicationClass.getStaffId());
+                                        intent1.putExtra("staff_role", applicationClass.getStaff_role());
+                                        intent1.putExtra("fpf_id", applicationClass.getStaffId());
+                                        intent1.putExtra("staff_hub", applicationClass.getStaff_hub());
+                                        intent1.putExtra("module", "access_control");
+                                        intent1.putExtra("app_version", applicationClass.getApp_version());
+                                        intent1.putExtra("staff_program", applicationClass.getStaff_program());
 
-                                         } catch (ParseException e) {
-                                             e.printStackTrace();
-                                         }
+                                        intent1.setComponent(new ComponentName(package_name, package_name + ".Main2Activity"));
+                                        intent1.putExtra("launch", "start");
+                                        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                        mCtx.startActivity(intent1);
+                                    } catch (Exception e) {
+                                        Toast.makeText(mCtx, "This application is not installed on this phone", Toast.LENGTH_SHORT).show();
+                                    }
 
+                                }
+                            }
+                        };
 
-                                     }
+                        downloadApplication.execute(package_name);
 
-                                     else if(s.trim().equalsIgnoreCase("corrupted")){
+                    } catch (Exception e) {
+                        Toast.makeText(mCtx, "This application is not installed on this phone", Toast.LENGTH_SHORT).show();
+                    }
 
-                                         try {
-                                             PackageInfo packageInfo = mCtx.getPackageManager().getPackageInfo(package_name, 0);
-                                             AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
-                                             alertDialog.setTitle("Access Control");
-                                             alertDialog.setMessage("This application version '"+packageInfo.versionName+"' is not a standard application version, contact Enterprise Systems");
-                                             alertDialog.setIcon(R.drawable.component_babbangona_logo);
-
-                                             alertDialog.show();
-
-                                         } catch (PackageManager.NameNotFoundException e) {
-                                             e.printStackTrace();
-                                         }
-
-
-
-                                     }
-
-                                     else{
-                                         try {
-                                             AppVersionDatabaseController.DatabaseHelper databaseHelper = new AppVersionDatabaseController.DatabaseHelper(context);
-                                             databaseHelper.LastOpened(package_name);
-                                             Intent intent1 = new Intent(Intent.ACTION_MAIN);
-                                             intent1.putExtra("staff_name", applicationClass.getStaffName());
-                                             intent1.putExtra("staff_id", applicationClass.getStaffId());
-                                             intent1.putExtra("staff_role", applicationClass.getStaff_role());
-                                             intent1.putExtra("fpf_id", applicationClass.getStaffId());
-                                             intent1.putExtra("staff_hub", applicationClass.getStaff_hub());
-                                             intent1.putExtra("module", "access_control");
-                                             intent1.putExtra("app_version", applicationClass.getApp_version());
-
-                                             intent1.setComponent(new ComponentName(package_name, package_name + ".Main2Activity"));
-                                             intent1.putExtra("launch", "start");
-                                             intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                             mCtx.startActivity(intent1);
-                                         }catch (Exception e) {
-                                             Toast.makeText(mCtx, "This application is not installed on this phone", Toast.LENGTH_SHORT).show();
-                                         }
-
-                                     }
-                                 }
-                             };
-
-                             downloadApplication.execute(package_name);
-
-                         } catch (Exception e) {
-                             Toast.makeText(mCtx, "This application is not installed on this phone", Toast.LENGTH_SHORT).show();
-                         }
-
-                     }
+                }
 
             }
         });
 
 
     }
-
 
 
     @Override
@@ -438,41 +410,33 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
     class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        TextView D_app_name, D_staff_id, D_status,hidden,update,app_version;
+        TextView D_app_name, D_staff_id, D_status, hidden, update, app_version;
         Button open, download;
-
-
-
-
 
 
         public ProductViewHolder(View itemView) {
             super(itemView);
 
             D_app_name = (TextView) itemView.findViewById(R.id.app_name);
-            D_status= (TextView) itemView.findViewById(R.id.status);
-            hidden = (TextView)itemView.findViewById(R.id.hidden);
-            open= (Button)itemView.findViewById(R.id.btn);
-            download= (Button)itemView.findViewById(R.id.btn2);
-            update = (TextView)itemView.findViewById(R.id.update);
-            app_version = (TextView)itemView.findViewById(R.id.app_version);
-
-
-
+            D_status = (TextView) itemView.findViewById(R.id.status);
+            hidden = (TextView) itemView.findViewById(R.id.hidden);
+            open = (Button) itemView.findViewById(R.id.btn);
+            download = (Button) itemView.findViewById(R.id.btn2);
+            update = (TextView) itemView.findViewById(R.id.update);
+            app_version = (TextView) itemView.findViewById(R.id.app_version);
 
         }
 
 
-
     }
 
-    private   class DownloadTask extends AsyncTask<String, Integer, String> {
+    private class DownloadTask extends AsyncTask<String, Integer, String> {
 
         private Context context;
 
         ProgressDialog mProgressDialog;
         private PowerManager.WakeLock mWakeLock;
-        String package_name,app_name;
+        String package_name, app_name;
 
 
         public DownloadTask(Context context) {
@@ -503,7 +467,6 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         }
 
 
-
         @Override
         protected String doInBackground(String... sUrl) {
             InputStream input = null;
@@ -512,7 +475,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
             package_name = sUrl[1];
             app_name = sUrl[2];
-            app_name = app_name.replaceAll("\\s+","");
+            app_name = app_name.replaceAll("\\s+", "");
             app_name = app_name.toLowerCase();
             try {
                 URL url = new URL(sUrl[0]);
@@ -529,7 +492,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 // this will be useful to display download percentage
                 // might be -1: server did not report the length
                 int fileLength = connection.getContentLength();
-                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download", app_name+".apk");
+                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download", app_name + ".apk");
                 // download the file
                 input = connection.getInputStream();
                 output = new FileOutputStream(file);
@@ -551,7 +514,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 }
             } catch (Exception e) {
 
-                Log.d("STAGE 1",e.toString());
+                Log.d("STAGE 1", e.toString());
                 return e.toString();
             } finally {
                 try {
@@ -560,7 +523,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                     if (input != null)
                         input.close();
                 } catch (IOException ignored) {
-                    Log.d("STAGE 2",ignored.toString());
+                    Log.d("STAGE 2", ignored.toString());
                 }
 
                 if (connection != null)
@@ -591,14 +554,14 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
             mWakeLock.release();
             mProgressDialog.dismiss();
             if (result != null)
-                Toast.makeText(context,"Download error: "+result, Toast.LENGTH_LONG).show();
-            else{
+                Toast.makeText(context, "Download error: " + result, Toast.LENGTH_LONG).show();
+            else {
 
 
-                File fileApkToInstall = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Download",app_name+".apk");
+                File fileApkToInstall = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Download", app_name + ".apk");
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
 
-                    try{
+                    try {
 
                         Uri apkUri = FileProvider.getUriForFile(mCtx, "com.spicysoftware.test.provider", fileApkToInstall);
                         Intent intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
@@ -607,7 +570,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                         mCtx.startActivity(intent);
 
 
-                    }catch(Exception e){
+                    } catch (Exception e) {
 
                         Log.d("download_error", String.valueOf(e));
                     }
@@ -621,7 +584,8 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                     mCtx.startActivity(intent);
 
                     String res = controlDB.update_download_version(package_name);
-                }            }
+                }
+            }
         }
     }
 

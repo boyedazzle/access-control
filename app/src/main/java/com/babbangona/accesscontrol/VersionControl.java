@@ -4,22 +4,22 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
-import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import junit.runner.Version;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,7 +34,7 @@ public class VersionControl extends AppCompatActivity {
     RecyclerView recyclerView;
     ControlDB controlDB;
     List<VersionControlClass> productList;
-    ArrayList<Map<String,String>> appRecords;
+    ArrayList<Map<String, String>> appRecords;
     String staff_id;
     TextView tvStatus;
 
@@ -56,10 +56,6 @@ public class VersionControl extends AppCompatActivity {
             public void onClick(View view) {
 
 
-
-
-
-
                 AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
                 alertDialog.setTitle("Access Control");
                 alertDialog.setMessage("");
@@ -75,12 +71,12 @@ public class VersionControl extends AppCompatActivity {
                                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                                 progressDialog.show();
 
-                                @SuppressLint("StaticFieldLeak") SyncData.SyncAppStatus syncAppStatus = new SyncData.SyncAppStatus(getApplicationContext()){
+                                @SuppressLint("StaticFieldLeak") SyncData.SyncAppStatus syncAppStatus = new SyncData.SyncAppStatus(getApplicationContext()) {
 
                                     @Override
-                                    protected void onPostExecute(String s){
+                                    protected void onPostExecute(String s) {
 
-                                        Log.d("--H--E",s);
+                                        Log.d("--H--E", s);
                                         progressDialog.dismiss();
 
                                     }
@@ -102,19 +98,19 @@ public class VersionControl extends AppCompatActivity {
                                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                                 progressDialog.show();
 
-                                @SuppressLint("StaticFieldLeak") SyncData.AppVersionDownload appVersionDownload = new SyncData.AppVersionDownload(getApplicationContext()){
+                                @SuppressLint("StaticFieldLeak") SyncData.AppVersionDownload appVersionDownload = new SyncData.AppVersionDownload(getApplicationContext()) {
 
                                     @Override
-                                    protected void onPostExecute(String s){
+                                    protected void onPostExecute(String s) {
                                         progressDialog.dismiss();
-                                        if(s.trim().equalsIgnoreCase("done")){
+                                        if (s.trim().equalsIgnoreCase("done")) {
                                             Toast.makeText(context, "Refreshed", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(getApplicationContext(),VersionControl.class);
+                                            Intent intent = new Intent(getApplicationContext(), VersionControl.class);
                                             startActivity(intent);
 
-                                        }else if(s.trim().equalsIgnoreCase("not inserted")){
+                                        } else if (s.trim().equalsIgnoreCase("not inserted")) {
                                             Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show();
-                                        }else{
+                                        } else {
                                             Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
                                         }
                                     }
@@ -128,42 +124,36 @@ public class VersionControl extends AppCompatActivity {
                 );
 
 
-
-
                 alertDialog.show();
-
-
-
 
 
             }
         });
 
         SessionManagement sessionManagement = new SessionManagement(getApplicationContext());
-        HashMap<String,String>user = sessionManagement.getUserDetails();
+        HashMap<String, String> user = sessionManagement.getUserDetails();
         staff_id = user.get(SessionManagement.KEY_STAFF_ID);
 
         controlDB = ControlDB.getInstance(getApplicationContext());
         controlDB.open();
 
         appRecords = new ArrayList<>();
-        appRecords  = controlDB.loadVersion(staff_id);
+        appRecords = controlDB.loadVersion(staff_id);
 
-        if(appRecords.size() == 0){
+        if (appRecords.size() == 0) {
             tvStatus.setVisibility(View.VISIBLE);
-        }else{
+        } else {
             tvStatus.setVisibility(View.GONE);
         }
 
 
-        Log.d("ZZZZ",appRecords+"");
+        Log.d("ZZZZ", appRecords + "");
 
         productList = new ArrayList<>();
 
         try {
             JSONArray jsonArray = new JSONArray(appRecords);
-            for (int i = 0; i < jsonArray.length(); i++)
-            {
+            for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject Quiz = jsonArray.getJSONObject(i);
                 productList.add(new VersionControlClass(
                         Quiz.getString("appid_staffid"),

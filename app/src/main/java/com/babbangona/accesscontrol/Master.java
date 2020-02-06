@@ -9,8 +9,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AlertDialog;
+
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AlertDialog;
+
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -18,14 +20,12 @@ import java.util.Date;
 
 public class Master {
 
-    public static String time="";
+    public static String time = "";
     public static String longitude = "";
     public static String latitude = "";
 
 
     // This is the declaration of the version number
-
-
 
 
     public static String initialiseLocationListener(final Context context) {
@@ -39,7 +39,7 @@ public class Master {
                 latitude = String.valueOf(location.getLatitude());
                 longitude = String.valueOf(location.getLongitude());
 
-                if(!longitude.trim().equalsIgnoreCase("null") || longitude != null){
+                if (!longitude.trim().equalsIgnoreCase("null") || longitude != null) {
                    /* SessionManagement sessionManagement = new SessionManagement(context);
                     sessionManagement.createGPSSession(latitude,longitude);*/
                 }
@@ -53,7 +53,7 @@ public class Master {
                 }
             }
 
-            public void onStatusChanged(String provider, int status, Bundle extras){
+            public void onStatusChanged(String provider, int status, Bundle extras) {
 
             }
 
@@ -66,13 +66,13 @@ public class Master {
 
 //        ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},1);
 
-        if (android.support.v4.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+        if (androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
             try {
                 ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-            }catch(Exception e){
+            } catch (Exception e) {
 
             }
-            }
+        }
 
         try {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 10000, 0, locationListener);
@@ -85,42 +85,43 @@ public class Master {
             Date date = new Date();
             time = dateFormat.format(date);
         }
-        if (time.matches(""))
-        {
+        if (time.matches("")) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
             time = dateFormat.format(date);
         }
-        return time+"//"+longitude+"//"+latitude;
+        return time + "//" + longitude + "//" + latitude;
     }
 
-    public static void checkPermission(Context context){
+    public static void checkPermission(Context context) {
 
         try {
-            if (android.support.v4.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
+            if (androidx.core.content.ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != android.content.pm.PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions((Activity) context, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 5);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
         }
 
 
     }
 
-    public void enableLocations(final Context mCtx){
-        LocationManager lm = (LocationManager)mCtx.getSystemService(Context.LOCATION_SERVICE);
+    public void enableLocations(final Context mCtx) {
+        LocationManager lm = (LocationManager) mCtx.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
         boolean network_enabled = false;
 
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {}
+        } catch (Exception ex) {
+        }
 
         try {
             network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ex) {}
+        } catch (Exception ex) {
+        }
 
 
-        if(!gps_enabled && !network_enabled){
+        if (!gps_enabled && !network_enabled) {
             final AlertDialog.Builder builder = new AlertDialog.Builder(mCtx);
             builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
                     .setCancelable(false)

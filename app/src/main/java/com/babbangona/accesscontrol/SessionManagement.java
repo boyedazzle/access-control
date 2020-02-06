@@ -26,7 +26,7 @@ public class SessionManagement {
 
 
     // Email address (make variable public to access from outside)
-    public static final String KEY_STAFF_NAME  = "staffname";
+    public static final String KEY_STAFF_NAME = "staffname";
 
 
     // User name (make variable public to access from outside)
@@ -35,10 +35,11 @@ public class SessionManagement {
 
     public static final String KEY_LAST_SYNCED = "last_synced";
 
+    public static final String KEY_TEMPLATE = "template";
 
 
     // Constructor
-    public SessionManagement(Context context){
+    public SessionManagement(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
         editor = pref.edit();
@@ -48,7 +49,7 @@ public class SessionManagement {
 
     }
 
-    public void CreateLoginSession(String staffname, String staffid, String login_status){
+    public void CreateLoginSession(String staffname, String staffid, String login_status) {
         // Storing username in pref
         editor.putString(KEY_STAFF_NAME, staffname);
         // Storing role in pref
@@ -59,12 +60,23 @@ public class SessionManagement {
         editor.commit();
     }
 
-    public void SaveLastSynced(String date){
-        editor.putString(KEY_LAST_SYNCED,date);
+    public void SaveLastSynced(String date) {
+        editor.putString(KEY_LAST_SYNCED, date);
         editor.commit();
     }
 
-    public HashMap<String, String> getUserDetails(){
+    public void SaveLoginStatus(String status) {
+        editor.putString(KEY_LOGIN, status);
+        editor.commit();
+    }
+
+    public void SaveTemplate(String template, String staff_id) {
+        editor.putString(KEY_TEMPLATE, template + "___" + staff_id);
+        editor.commit();
+    }
+
+
+    public HashMap<String, String> getUserDetails() {
         HashMap<String, String> user = new HashMap<String, String>();
         // user name
         user.put(KEY_STAFF_NAME, pref.getString(KEY_STAFF_NAME, null));
@@ -72,19 +84,20 @@ public class SessionManagement {
         // user email id
         user.put(KEY_STAFF_ID, pref.getString(KEY_STAFF_ID, "TXX"));
 
-        user.put(KEY_LOGIN,pref.getString(KEY_LOGIN,null));
-        user.put(KEY_LAST_SYNCED,pref.getString(KEY_LAST_SYNCED,"2019-03-25 12:00:00"));
+        user.put(KEY_LOGIN, pref.getString(KEY_LOGIN, "false"));
+        user.put(KEY_LAST_SYNCED, pref.getString(KEY_LAST_SYNCED, "2019-03-25 12:00:00"));
+        user.put(KEY_TEMPLATE, pref.getString(KEY_TEMPLATE, "0___0"));
         // return user
         return user;
     }
 
-    public void logoutUser(){
+    public void logoutUser() {
         // Clearing all data from Shared Preferences
         editor.clear();
         editor.commit();
 
         // After logout redirect user to Loing Activity
-        Intent i = new Intent(_context, MainActivity.class);
+        Intent i = new Intent(_context, Main2Activity.class);
         // Closing all the Activities
         i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 

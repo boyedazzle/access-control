@@ -26,15 +26,14 @@ import java.util.Map;
 
 /**
  * @author Jason Wei
- *
  */
 public class AppVersionDatabaseController extends ContentProvider {
 
     /*
-    * This activity contains all the methods that retrieves data from the SQlite database
-    * also it has the content provider implementation that allows other application to access its database
-    *
-    * */
+     * This activity contains all the methods that retrieves data from the SQlite database
+     * also it has the content provider implementation that allows other application to access its database
+     *
+     * */
 
     private static final String TAG = "AppVersionDatabase";
 
@@ -42,23 +41,20 @@ public class AppVersionDatabaseController extends ContentProvider {
     private static final String VERSION_BINDING_TABLE = "version_binding";
 
     /*
-    * The string below are the column names for the version controller table
-    * */
+     * The string below are the column names for the version controller table
+     * */
     public static final String PACKAGE_NAME = "package_name";
     public static final String ACCESS_CONTROL_VERSION = "access_control_version";
     public static final String APP_VERSION = "application_version";
-    public static final String  STAFF_ID = "staff_id";
-    public static final String  APP_NAME = "app_name";
+    public static final String STAFF_ID = "staff_id";
+    public static final String APP_NAME = "app_name";
     public static final String USER_VERSION = "user_version";
     public static final String APP_LAST_USED_DATE = "app_last_used_date";
 
     private static final int DATABASE_VERSION = 1;
     public static final Uri CONTENT_URI = Uri.parse("content://"
-            + AppVersionDatabaseController.AUTHORITY + "/"+ VERSION_BINDING_TABLE);
-    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.jwei512."+ VERSION_BINDING_TABLE;
-
-
-
+            + AppVersionDatabaseController.AUTHORITY + "/" + VERSION_BINDING_TABLE);
+    public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.jwei512." + VERSION_BINDING_TABLE;
 
 
     public static final String AUTHORITY = "com.babbangona.accesscontrol";
@@ -66,7 +62,7 @@ public class AppVersionDatabaseController extends ContentProvider {
     private static final UriMatcher sUriMatcher;
 
     // url provided to other applications
-    static final String URL = "content://" + AUTHORITY + "/"+ VERSION_BINDING_TABLE;
+    static final String URL = "content://" + AUTHORITY + "/" + VERSION_BINDING_TABLE;
 
     private static final int NOTES = 1;
 
@@ -84,7 +80,7 @@ public class AppVersionDatabaseController extends ContentProvider {
         @Override
         public void onCreate(SQLiteDatabase db) {
             db.execSQL("CREATE TABLE " + VERSION_BINDING_TABLE + " (" + PACKAGE_NAME
-                    + " TEXT PRIMARY KEY,"  +ACCESS_CONTROL_VERSION+" TEXT,"  +USER_VERSION+" TEXT,"  +STAFF_ID+" TEXT, "+APP_NAME+" TEXT, "+ APP_LAST_USED_DATE+" TEXT );");
+                    + " TEXT PRIMARY KEY," + ACCESS_CONTROL_VERSION + " TEXT," + USER_VERSION + " TEXT," + STAFF_ID + " TEXT, " + APP_NAME + " TEXT, " + APP_LAST_USED_DATE + " TEXT );");
 
         }
 
@@ -95,31 +91,30 @@ public class AppVersionDatabaseController extends ContentProvider {
 
         }
 
-        public void insertOnlineVersionDownload (JSONArray jsonArray){
+        public void insertOnlineVersionDownload(JSONArray jsonArray) {
             SQLiteDatabase database = getWritableDatabase();
             JSONObject jsonObject = null;
-            for (int i = 0; i<jsonArray.length();i++){
+            for (int i = 0; i < jsonArray.length(); i++) {
                 int count = 0;
                 try {
                     jsonObject = jsonArray.getJSONObject(i);
-                    Cursor cursor = database.rawQuery("select count("+PACKAGE_NAME+") from "+VERSION_BINDING_TABLE+" where "+PACKAGE_NAME+" = \""+jsonObject.getString("package_name")+"\" ",null);
+                    Cursor cursor = database.rawQuery("select count(" + PACKAGE_NAME + ") from " + VERSION_BINDING_TABLE + " where " + PACKAGE_NAME + " = \"" + jsonObject.getString("package_name") + "\" ", null);
                     cursor.moveToFirst();
-                    if(!cursor.isAfterLast()){
+                    if (!cursor.isAfterLast()) {
                         count = cursor.getInt(0);
                     }
 
-                    if(count == 0) {
+                    if (count == 0) {
                         ContentValues contentValues = new ContentValues();
                         contentValues.put(PACKAGE_NAME, jsonObject.getString("package_name"));
                         contentValues.put(ACCESS_CONTROL_VERSION, jsonObject.getString("app_version"));
                         contentValues.put(USER_VERSION, jsonObject.getString("user_app_version"));
                         contentValues.put(APP_NAME, jsonObject.getString("app_name"));
                         contentValues.put(STAFF_ID, jsonObject.getString("staff_id"));
-
 
 
                         database.insert(VERSION_BINDING_TABLE, null, contentValues);
-                    }else{
+                    } else {
 
                         ContentValues contentValues = new ContentValues();
 
@@ -128,15 +123,15 @@ public class AppVersionDatabaseController extends ContentProvider {
                         contentValues.put(USER_VERSION, jsonObject.getString("user_app_version"));
                         contentValues.put(APP_NAME, jsonObject.getString("app_name"));
                         contentValues.put(STAFF_ID, jsonObject.getString("staff_id"));
-                        String where = PACKAGE_NAME+"=?";
-                        String[] whereArgs = new String[] {String.valueOf(jsonObject.getString("package_name"))};
+                        String where = PACKAGE_NAME + "=?";
+                        String[] whereArgs = new String[]{String.valueOf(jsonObject.getString("package_name"))};
 
                         database.update(VERSION_BINDING_TABLE, contentValues, where, whereArgs);
                     }
 
 
                 } catch (JSONException e) {
-                   Log.d(TAG,e.toString());
+                    Log.d(TAG, e.toString());
                 }
 
 
@@ -145,23 +140,23 @@ public class AppVersionDatabaseController extends ContentProvider {
 
         }
 
-        public ArrayList<Map<String,String>> getAppVersion(){
+        public ArrayList<Map<String, String>> getAppVersion() {
             SQLiteDatabase database = getWritableDatabase();
 
-            ArrayList<Map<String,String>> appVersions = new ArrayList<>();
-            Map<String,String> map = null;
+            ArrayList<Map<String, String>> appVersions = new ArrayList<>();
+            Map<String, String> map = null;
 
-            Cursor cursor = database.rawQuery("select "+PACKAGE_NAME+","+ACCESS_CONTROL_VERSION+","+USER_VERSION+","+APP_NAME+" from " +
-                    ""+VERSION_BINDING_TABLE+" where "+ACCESS_CONTROL_VERSION+" !='' and "+USER_VERSION+" != '' ",null);
+            Cursor cursor = database.rawQuery("select " + PACKAGE_NAME + "," + ACCESS_CONTROL_VERSION + "," + USER_VERSION + "," + APP_NAME + " from " +
+                    "" + VERSION_BINDING_TABLE + " where " + ACCESS_CONTROL_VERSION + " !='' and " + USER_VERSION + " != '' ", null);
             cursor.moveToFirst();
-            while (!cursor.isAfterLast()){
+            while (!cursor.isAfterLast()) {
                 map = new HashMap<>();
-                map.put("package_name",cursor.getString(0));
-                map.put("access_control_version",cursor.getString(1));
-                map.put("app_version",cursor.getString(2));
-                map.put("app_name",cursor.getString(3));
+                map.put("package_name", cursor.getString(0));
+                map.put("access_control_version", cursor.getString(1));
+                map.put("app_version", cursor.getString(2));
+                map.put("app_name", cursor.getString(3));
                 appVersions.add(map);
-                Log.d("Version_Response",appVersions+" ");
+                Log.d("Version_Response", appVersions + " ");
 
                 cursor.moveToNext();
             }
@@ -170,23 +165,23 @@ public class AppVersionDatabaseController extends ContentProvider {
             return appVersions;
         }
 
-        public ArrayList<Map<String,String>> getAppVersionByPackageName(String package_name){
+        public ArrayList<Map<String, String>> getAppVersionByPackageName(String package_name) {
             SQLiteDatabase database = getWritableDatabase();
 
-            ArrayList<Map<String,String>> appVersions = new ArrayList<>();
-            Map<String,String> map = null;
+            ArrayList<Map<String, String>> appVersions = new ArrayList<>();
+            Map<String, String> map = null;
 
-            Cursor cursor = database.rawQuery("select "+PACKAGE_NAME+","+ACCESS_CONTROL_VERSION+","+USER_VERSION+","+APP_NAME+" from " +
-                    ""+VERSION_BINDING_TABLE+" where "+PACKAGE_NAME+" = \""+package_name+"\" ",null);
+            Cursor cursor = database.rawQuery("select " + PACKAGE_NAME + "," + ACCESS_CONTROL_VERSION + "," + USER_VERSION + "," + APP_NAME + " from " +
+                    "" + VERSION_BINDING_TABLE + " where " + PACKAGE_NAME + " = \"" + package_name + "\" ", null);
             cursor.moveToFirst();
-            while (!cursor.isAfterLast()){
+            while (!cursor.isAfterLast()) {
                 map = new HashMap<>();
-                map.put("package_name",cursor.getString(0));
-                map.put("access_control_version",cursor.getString(1));
-                map.put("app_version",cursor.getString(2));
-                map.put("app_name",cursor.getString(3));
+                map.put("package_name", cursor.getString(0));
+                map.put("access_control_version", cursor.getString(1));
+                map.put("app_version", cursor.getString(2));
+                map.put("app_name", cursor.getString(3));
                 appVersions.add(map);
-                Log.d("Version_Response",appVersions+" ");
+                Log.d("Version_Response", appVersions + " ");
 
                 cursor.moveToNext();
             }
@@ -195,79 +190,76 @@ public class AppVersionDatabaseController extends ContentProvider {
             return appVersions;
         }
 
-        public void InsertVersionRecords(String package_name,String user_version,String staff_id){
-                   Log.d("HHEELLOONOW", package_name+" "+user_version+" "+staff_id);
-                   int count = 0;
-                   SQLiteDatabase database = getWritableDatabase();
-                    Cursor cursor = database.rawQuery("select count("+PACKAGE_NAME+") from "+VERSION_BINDING_TABLE+" where "+PACKAGE_NAME+" = '"+package_name+"' ",null);
-                    cursor.moveToFirst();
+        public void InsertVersionRecords(String package_name, String user_version, String staff_id) {
+            Log.d("HHEELLOONOW", package_name + " " + user_version + " " + staff_id);
+            int count = 0;
+            SQLiteDatabase database = getWritableDatabase();
+            Cursor cursor = database.rawQuery("select count(" + PACKAGE_NAME + ") from " + VERSION_BINDING_TABLE + " where " + PACKAGE_NAME + " = '" + package_name + "' ", null);
+            cursor.moveToFirst();
 
-                    if(!cursor.isAfterLast()){
-                        count = cursor.getInt(0);
-                    }
-            Log.d("HHEELLOONOW", count+" ");
-                    if(count == 0) {
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(PACKAGE_NAME, package_name);
-                        contentValues.put(USER_VERSION, user_version);
-                        contentValues.put(STAFF_ID, staff_id);
-
-
-                        long x = database.insert(VERSION_BINDING_TABLE, null, contentValues);
-                        Log.d("HHEELLOONOW", x+" ");
-
-                    }else{
-
-                        ContentValues contentValues = new ContentValues();
-                        contentValues.put(USER_VERSION, user_version);
-                        contentValues.put(STAFF_ID, staff_id);
-
-                        String where = PACKAGE_NAME+"= \""+package_name+"\"";
-                        String[] whereArgs = new String[] {package_name};
-
-                        int x = database.update(VERSION_BINDING_TABLE, contentValues, where, null);
-                        Log.d("HHEELLOONOW", x+" ");
-                    }
+            if (!cursor.isAfterLast()) {
+                count = cursor.getInt(0);
+            }
+            Log.d("HHEELLOONOW", count + " ");
+            if (count == 0) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(PACKAGE_NAME, package_name);
+                contentValues.put(USER_VERSION, user_version);
+                contentValues.put(STAFF_ID, staff_id);
 
 
+                long x = database.insert(VERSION_BINDING_TABLE, null, contentValues);
+                Log.d("HHEELLOONOW", x + " ");
 
+            } else {
 
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(USER_VERSION, user_version);
+                contentValues.put(STAFF_ID, staff_id);
 
+                String where = PACKAGE_NAME + "= \"" + package_name + "\"";
+                String[] whereArgs = new String[]{package_name};
+
+                int x = database.update(VERSION_BINDING_TABLE, contentValues, where, null);
+                Log.d("HHEELLOONOW", x + " ");
             }
 
-        public ArrayList<Map<String,String>> UploadAppVersion(String staff_id){
-              ArrayList<Map<String,String>> uploadVersions;
-              Map<String,String> map= null;
-              SQLiteDatabase database  = getWritableDatabase();
-              Cursor cursor = database.rawQuery("select "+PACKAGE_NAME+","+USER_VERSION+","+STAFF_ID+","+APP_LAST_USED_DATE+" from "+VERSION_BINDING_TABLE+" where "+STAFF_ID+" = \""+staff_id+"\" and "+USER_VERSION+" != '' ",null);
-              cursor.moveToFirst();
-              uploadVersions = new ArrayList<>();
 
-              while(!cursor.isAfterLast()){
-                  map = new HashMap<>();
-                  map.put("package_name",cursor.getString(cursor.getColumnIndex(PACKAGE_NAME)));
-                  map.put("user_version",cursor.getString(cursor.getColumnIndex(USER_VERSION)));
-                  map.put("staff_id",cursor.getString(cursor.getColumnIndex(STAFF_ID)));
-                  map.put("app_last_used_date",cursor.getString(cursor.getColumnIndex(APP_LAST_USED_DATE)));
+        }
 
-                  uploadVersions.add(map);
-                  Log.d("--H--E",uploadVersions+"");
-                  cursor.moveToNext();
-              }
+        public ArrayList<Map<String, String>> UploadAppVersion(String staff_id) {
+            ArrayList<Map<String, String>> uploadVersions;
+            Map<String, String> map = null;
+            SQLiteDatabase database = getWritableDatabase();
+            Cursor cursor = database.rawQuery("select " + PACKAGE_NAME + "," + USER_VERSION + "," + STAFF_ID + "," + APP_LAST_USED_DATE + " from " + VERSION_BINDING_TABLE + " where " + STAFF_ID + " = \"" + staff_id + "\" and " + USER_VERSION + " != '' ", null);
+            cursor.moveToFirst();
+            uploadVersions = new ArrayList<>();
+
+            while (!cursor.isAfterLast()) {
+                map = new HashMap<>();
+                map.put("package_name", cursor.getString(cursor.getColumnIndex(PACKAGE_NAME)));
+                map.put("user_version", cursor.getString(cursor.getColumnIndex(USER_VERSION)));
+                map.put("staff_id", cursor.getString(cursor.getColumnIndex(STAFF_ID)));
+                map.put("app_last_used_date", cursor.getString(cursor.getColumnIndex(APP_LAST_USED_DATE)));
+
+                uploadVersions.add(map);
+                Log.d("--H--E", uploadVersions + "");
+                cursor.moveToNext();
+            }
 
             return uploadVersions;
         }
 
-        public void LastOpened(String packageName){
+        public void LastOpened(String packageName) {
             SQLiteDatabase database = getWritableDatabase();
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = new Date();
-            String date_updated  = dateFormat.format(date);
+            String date_updated = dateFormat.format(date);
             ContentValues contentValues = new ContentValues();
             contentValues.put(APP_LAST_USED_DATE, date_updated);
 
-            String where = PACKAGE_NAME+"=?";
-            String[] whereArgs = new String[] {packageName};
+            String where = PACKAGE_NAME + "=?";
+            String[] whereArgs = new String[]{packageName};
 
             database.update(VERSION_BINDING_TABLE, contentValues, where, whereArgs);
 
@@ -275,6 +267,7 @@ public class AppVersionDatabaseController extends ContentProvider {
 
 
     }
+
     private DatabaseHelper dbHelper;
 
     @Override
@@ -284,7 +277,7 @@ public class AppVersionDatabaseController extends ContentProvider {
             case NOTES:
                 break;
             case NOTES_ID:
-                where = where + "_id = "+ uri.getLastPathSegment();
+                where = where + "_id = " + uri.getLastPathSegment();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);
@@ -304,7 +297,8 @@ public class AppVersionDatabaseController extends ContentProvider {
                 throw new IllegalArgumentException("Unknown URI " + uri);
         }
     }
-// The insert method is called when other apps push data into the incentive app
+
+    // The insert method is called when other apps push data into the incentive app
     @Override
     public Uri insert(Uri uri, ContentValues initialValues) {
         if (sUriMatcher.match(uri) != NOTES) {
@@ -319,7 +313,7 @@ public class AppVersionDatabaseController extends ContentProvider {
         }
 
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        long rowId = db.insert(VERSION_BINDING_TABLE,PACKAGE_NAME, values);
+        long rowId = db.insert(VERSION_BINDING_TABLE, PACKAGE_NAME, values);
         if (rowId > 0) {
             Uri noteUri = ContentUris.withAppendedId(CONTENT_URI, rowId);
             getContext().getContentResolver().notifyChange(noteUri, null);
@@ -346,7 +340,7 @@ public class AppVersionDatabaseController extends ContentProvider {
             case NOTES:
                 break;
             case NOTES_ID:
-                selection = selection + "_id = "+ uri.getLastPathSegment();
+                selection = selection + "_id = " + uri.getLastPathSegment();
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI " + uri);

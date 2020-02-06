@@ -6,6 +6,9 @@
     <string name="login">Sign In</string>
     <string name="logout">Log Out</string>
 
+    <string name="auth_face">Resume With Face</string>
+    <string name="auth_password">Resume With Password</string>
+
 
     <string name="string"> Click refresh to load more names (*Optional)</string>
     <string name="refreshapp">Click Refresh  to load application(s)</string>
