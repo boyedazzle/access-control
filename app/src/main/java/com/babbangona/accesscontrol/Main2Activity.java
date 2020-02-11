@@ -52,8 +52,8 @@ public class Main2Activity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_homepage);
 
-        username = (AutoCompleteTextView) findViewById(R.id.username);
-        password = (EditText) findViewById(R.id.password);
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
 
         controlDB = ControlDB.getInstance(this);
         controlDB.open();

@@ -18,6 +18,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.PowerManager;
+
+import androidx.cardview.widget.CardView;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
@@ -26,6 +28,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,17 +82,17 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
     @SuppressLint("SetTextI18n")
 
-    public void onBindViewHolder(final ProductViewHolder holder, final int position) {
+    public void onBindViewHolder(ProductViewHolder holder, final int position) {
         applicationClass = productList.get(position);
         online_status = applicationClass.getStatus();
         download_version = Integer.parseInt(applicationClass.getDownload_version());
 
-
         holder.D_app_name.setText("");
         //holder.D_staff_id.setText("");
         holder.hidden.setText("");
-        holder.D_status.setText("");
+        holder.D_describtion.setText("");
         holder.app_version.setText("");
+        holder.D_app_image.setImageResource(R.drawable.profile_component);
         try {
             new_version = Integer.parseInt(applicationClass.getNew_version());
         } catch (Exception e) {
@@ -97,38 +100,38 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         }
 
 
-        if (download_version == 1) holder.download.setVisibility(View.INVISIBLE);
-        else if (download_version == 0) holder.download.setVisibility(View.VISIBLE);
+       // if (download_version == 1) holder.download.setVisibility(View.INVISIBLE);
+       // else if (download_version == 0) holder.download.setVisibility(View.VISIBLE);
 
         //Log.d("PARSE 1","     "+download_version+"     "+pack);
 
 
-        if (download_version == 0 && (new_version - download_version) > 0)
-            holder.update.setVisibility(View.INVISIBLE);
+        if (download_version == 0 && (new_version - download_version) > 0);
+          //  holder.update.setVisibility(View.INVISIBLE);
 
         else if (new_version - download_version == 0) {
-            holder.download.setVisibility(View.INVISIBLE);
-            holder.update.setVisibility(View.INVISIBLE);
+           // holder.download.setVisibility(View.INVISIBLE);
+           // holder.update.setVisibility(View.INVISIBLE);
         } else if (download_version > 0 && (new_version - download_version) > 0) {
-            holder.update.setVisibility(View.VISIBLE);
-            holder.download.setVisibility(View.VISIBLE);
-            holder.download.setText(mCtx.getResources().getString(R.string.update));
-        } else if ((new_version - download_version) <= 0) holder.update.setVisibility(View.GONE);
+            //holder.update.setVisibility(View.VISIBLE);
+           // holder.download.setVisibility(View.VISIBLE);
+           // holder.download.setText(mCtx.getResources().getString(R.string.update));
+        } //else if ((new_version - download_version) <= 0) holder.update.setVisibility(View.GONE);
 
         if (Integer.parseInt(online_status) == 1) {
-            holder.D_status.setText(holder.D_status.getText() + "" + "ACTIVE");
-            holder.D_status.setTextColor(Color.parseColor("#008000"));
-        } else {
+            holder.D_app_name.setText(holder.D_app_name.getText() + applicationClass.getAppName());
+            holder.D_app_name.setTextColor(Color.parseColor("#008000"));
+        } /*else {
             holder.D_status.setText(holder.D_status.getText() + "" + "INACTIVE");
             holder.D_status.setTextColor(Color.parseColor("#ff0000"));
-        }
+        }*/
 
-        holder.D_app_name.setText(holder.D_app_name.getText() + applicationClass.getAppName());
         holder.hidden.setText(holder.hidden.getText() + "" + applicationClass.getAppName());
         holder.app_version.setText(holder.app_version.getText() + applicationClass.getApp_version());
+        holder.D_describtion.setText(holder.D_describtion.getText() + "" + applicationClass.getWhat_new());
 
 
-        holder.update.setOnClickListener(new View.OnClickListener() {
+     /*   holder.update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 controlDB = ControlDB.getInstance(mCtx);
@@ -155,14 +158,14 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
 
             }
-        });
+        });*/
 
-        holder.download.setOnClickListener(new View.OnClickListener() {
+/*        holder.download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
 
                 alertDialog.setTitle("Access Control");
                 alertDialog.setMessage("Are you sure you want to download this application ? ");
@@ -202,8 +205,9 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
             }
         });
+        */
 
-        holder.open.setOnClickListener(new View.OnClickListener() {
+ /*     holder.open.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
 
@@ -288,7 +292,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
                                         if (date2.after(date3)) {
 
-                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
+                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
                                             alertDialog.setTitle("Access Control");
                                             alertDialog.setMessage("This application is outdated, update to version '" + holder.app_version.getText().toString() + "'");
                                             alertDialog.setIcon(R.drawable.component_babbangona_logo);
@@ -303,7 +307,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                                             String output1 = sdf1.format(c1.getTime());
 
 
-                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
+                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
                                             alertDialog.setTitle("Access Control");
                                             alertDialog.setMessage("This application is outdated , ensure you update to version '" + holder.app_version.getText().toString() + "' by " + output1);
                                             alertDialog.setIcon(R.drawable.component_babbangona_logo);
@@ -349,7 +353,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
 
                                     try {
                                         PackageInfo packageInfo = mCtx.getPackageManager().getPackageInfo(package_name, 0);
-                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
+                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
                                         alertDialog.setTitle("Access Control");
                                         alertDialog.setMessage("This application version '" + packageInfo.versionName + "' is not a standard application version, contact Enterprise Systems");
                                         alertDialog.setIcon(R.drawable.component_babbangona_logo);
@@ -396,9 +400,81 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 }
 
             }
-        });
+        });*/
+       holder.open.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+
+               controlDB = ControlDB.getInstance(mCtx);
+               controlDB.open();
+               final String package_name = controlDB.package_name(holder.D_app_name.getText().toString().trim());
+
+               PackageInfo packageInfo = null;
+
+               //get staff id from shared preference
+               SessionManagement sessionManagement = new SessionManagement(mCtx);
+               HashMap<String, String> user = sessionManagement.getUserDetails();
+               String staff_id = user.get(SessionManagement.KEY_STAFF_ID);
+
+               //save the application version in shared preference
+               AppVersionDatabaseController.DatabaseHelper appVersionDatabaseController = new AppVersionDatabaseController.DatabaseHelper(mCtx);
+               appVersionDatabaseController.InsertVersionRecords(package_name, getVersionNumber(package_name), staff_id);
 
 
+
+               try {
+                   @SuppressLint("StaticFieldLeak") SyncData.AnalyseVersions downloadApplication = new SyncData.AnalyseVersions(mCtx) {
+                       @Override
+                       protected void onPostExecute(String s) {
+                           if (s.trim().equalsIgnoreCase("outdated")) {
+                               // show dialog to download/update the application based on whether it is found or not
+
+                           } else if (s.trim().equalsIgnoreCase("corrupted")) {
+
+                               try {
+
+                                    PackageInfo packageInfo = mCtx.getPackageManager().getPackageInfo(package_name, 0);
+                                    showAlert(v.getContext(),"This application version '" + packageInfo.versionName + "' is not a standard application version, contact Enterprise Systems");
+
+                               } catch (PackageManager.NameNotFoundException e) {
+                                   e.printStackTrace();
+                               }
+
+
+                           } else {
+                               try {
+                                   AppVersionDatabaseController.DatabaseHelper databaseHelper = new AppVersionDatabaseController.DatabaseHelper(context);
+                                   databaseHelper.LastOpened(package_name);
+                                   Intent intent1 = new Intent(Intent.ACTION_MAIN);
+                                   intent1.putExtra("staff_name", applicationClass.getStaffName());
+                                   intent1.putExtra("staff_id", applicationClass.getStaffId());
+                                   intent1.putExtra("staff_role", applicationClass.getStaff_role());
+                                   intent1.putExtra("fpf_id", applicationClass.getStaffId());
+                                   intent1.putExtra("staff_hub", applicationClass.getStaff_hub());
+                                   intent1.putExtra("module", "access_control");
+                                   intent1.putExtra("app_version", applicationClass.getApp_version());
+                                   intent1.putExtra("staff_program", applicationClass.getStaff_program());
+
+                                   intent1.setComponent(new ComponentName(package_name, package_name + ".Main2Activity"));
+                                   intent1.putExtra("launch", "start");
+                                   intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                   mCtx.startActivity(intent1);
+                               } catch (Exception e) {
+                                   Toast.makeText(mCtx, "This application is not installed on this phone", Toast.LENGTH_SHORT).show();
+                               }
+
+                           }
+                       }
+                   };
+
+                   downloadApplication.execute(package_name);
+
+               } catch (Exception e) {
+                   Toast.makeText(mCtx, "This application is not installed on this phone", Toast.LENGTH_SHORT).show();
+               }
+
+           }
+       });
     }
 
 
@@ -407,25 +483,32 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
         Log.d("product", String.valueOf(productList.size()));
         return productList.size();
     }
+    
+
 
     class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        TextView D_app_name, D_staff_id, D_status, hidden, update, app_version;
-        Button open, download;
+        TextView D_app_name, D_describtion, D_status, hidden, update, app_version;
+       // Button open, download;
+        CardView open;
+        ImageView D_app_image;
+        
 
 
         public ProductViewHolder(View itemView) {
             super(itemView);
 
-            D_app_name = (TextView) itemView.findViewById(R.id.app_name);
-            D_status = (TextView) itemView.findViewById(R.id.status);
-            hidden = (TextView) itemView.findViewById(R.id.hidden);
-            open = (Button) itemView.findViewById(R.id.btn);
-            download = (Button) itemView.findViewById(R.id.btn2);
-            update = (TextView) itemView.findViewById(R.id.update);
-            app_version = (TextView) itemView.findViewById(R.id.app_version);
+            D_app_name = itemView.findViewById(R.id.app_name);
+            D_describtion = itemView.findViewById(R.id.what_new);
+            hidden = itemView.findViewById(R.id.hidden);
+            open = itemView.findViewById(R.id.eachappitem_cardview);
+           // download = itemView.findViewById(R.id.btn2);
+          //  update = itemView.findViewById(R.id.update);
+            app_version = itemView.findViewById(R.id.app_version);
+            D_app_image = itemView.findViewById(R.id.app_image);
 
         }
+
 
 
     }
@@ -497,7 +580,7 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 input = connection.getInputStream();
                 output = new FileOutputStream(file);
 
-                byte data[] = new byte[4096];
+                byte[] data = new byte[4096];
                 long total = 0;
                 int count;
                 while ((count = input.read(data)) != -1) {
@@ -587,6 +670,30 @@ public class ApplicationAdapter extends RecyclerView.Adapter<ApplicationAdapter.
                 }
             }
         }
+    }
+
+
+    private String getVersionNumber(String package_name){
+
+        PackageInfo packageInfo;
+        try {
+            packageInfo = mCtx.getPackageManager().getPackageInfo(package_name, 0);
+            return packageInfo.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return "0.0.0";
+
+        }
+    }
+
+    private void showAlert(Context c,String message){
+
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(c);
+        alertDialog.setTitle("Access Control");
+        alertDialog.setMessage(message);
+        alertDialog.setIcon(R.drawable.component_babbangona_logo);
+
+        alertDialog.show();
     }
 
 }

@@ -44,9 +44,9 @@ public class ApplicationDetails extends Activity {
     SessionManagement sessionManagement;
     ControlDB controlDb_;
     ArrayList map;
-    TextView staff_info, tvStaffId;
+    TextView staff_info, tvStaffId, tvstaff_hub;
     TextView access_version;
-    String package_name;
+    String package_name, staff_hub;
     private static final int PERMISSION_REQUEST_CODE = 1;
 
     @SuppressLint("SetTextI18n")
@@ -60,19 +60,27 @@ public class ApplicationDetails extends Activity {
         access_version.setText("");
         access_version.setText(access_version.getText() + "Access Control v" + BuildConfig.VERSION_NAME);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recylcerView2);
+        recyclerView = findViewById(R.id.recylcerView2);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
         sessionManagement = new SessionManagement(getApplicationContext());
-        staff_info = (TextView) findViewById(R.id.staff_info);
+        staff_info = findViewById(R.id.staff_info);
         tvStaffId = findViewById(R.id.staff_id);
+        tvstaff_hub = findViewById(R.id.staff_hub);
 
 
         HashMap<String, String> user = sessionManagement.getUserDetails();
         String staff_id = user.get(SessionManagement.KEY_STAFF_ID);
         String staff_name = user.get(SessionManagement.KEY_STAFF_NAME);
+
+        controlDb_ = ControlDB.getInstance(getApplicationContext());
+        controlDb_.open();
+        staff_hub = controlDb_.getHubName(staff_id);
+        tvstaff_hub.setText(staff_hub);
+
+
 
 
         if (checkVersion().length() > 0) sendNotification(checkVersion(), "Access Control", 1);
@@ -90,6 +98,7 @@ public class ApplicationDetails extends Activity {
             controlDb_ = ControlDB.getInstance(getApplicationContext());
             controlDb_.open();
             String status = controlDb_.status_by_packagename(package_name);
+            staff_hub = controlDb_.getHubName(staff_id);
             if (status.trim().equalsIgnoreCase("1")) {
 
                 Intent intent1 = new Intent(Intent.ACTION_MAIN);
@@ -125,7 +134,7 @@ public class ApplicationDetails extends Activity {
             }
 
         } catch (Exception e) {
-            staff_info.setText(staff_info.getText() + "Staff Name: " + staff_name + "\nStaff ID: " + staff_id);
+            staff_info.setText(staff_info.getText() + "Staff Name: " + staff_name + "\nStaff ID: " + staff_id + "\nStaff Hub: " + staff_hub);
             productList = new ArrayList<>();
 
             controlDb_ = ControlDB.getInstance(getApplicationContext());
@@ -198,16 +207,19 @@ public class ApplicationDetails extends Activity {
         super.onResume();
         setContentView(R.layout.activity_application_details);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recylcerView2);
+        recyclerView = findViewById(R.id.recylcerView2);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         sessionManagement = new SessionManagement(getApplicationContext());
-        staff_info = (TextView) findViewById(R.id.staff_info);
+        staff_info = findViewById(R.id.staff_info);
         tvStaffId = findViewById(R.id.staff_id);
+        tvstaff_hub = findViewById(R.id.staff_hub);
+
 
         HashMap<String, String> user = sessionManagement.getUserDetails();
         String staff_id = user.get(SessionManagement.KEY_STAFF_ID);
         String staff_name = user.get(SessionManagement.KEY_STAFF_NAME);
+
 
         access_version = findViewById(R.id.access_control_version);
 
@@ -223,6 +235,7 @@ public class ApplicationDetails extends Activity {
             controlDb_ = ControlDB.getInstance(getApplicationContext());
             controlDb_.open();
             String status = controlDb_.status_by_packagename(package_name);
+            staff_hub = controlDb_.getHubName(staff_id);
             if (status.trim().equalsIgnoreCase("1")) {
 
                 Intent intent1 = new Intent(Intent.ACTION_MAIN);
@@ -260,9 +273,11 @@ public class ApplicationDetails extends Activity {
 
             staff_info.setText("");
             tvStaffId.setText("");
+            tvstaff_hub.setText("");
 
             staff_info.setText(staff_info.getText() + staff_name);
             tvStaffId.setText(tvStaffId.getText() + staff_id);
+            tvstaff_hub.setText(tvstaff_hub.getText() + staff_hub);
 
             productList = new ArrayList<>();
 
@@ -349,11 +364,7 @@ public class ApplicationDetails extends Activity {
 
         //If the app does have this permission, then return true//
 
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
+        return result == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
@@ -363,7 +374,7 @@ public class ApplicationDetails extends Activity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
 
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:

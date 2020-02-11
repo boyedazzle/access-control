@@ -129,7 +129,7 @@ public class ControlDB {
         ArrayList<Map<String, String>> wordList;
         wordList = new ArrayList<Map<String, String>>();
 
-        Cursor cursor = database.rawQuery("SELECT a.app_name,a.package_name, a.status,a.staff_id,b.staff_name,a.download_version,a.new_version,a.what_new,b.role,b.hub,a.app_version,b.staff_program FROM es_application_details a JOIN users b on a.staff_id = b.staff_id Where a.staff_id  = \"" + staff_id + "\" order by a.app_name asc", null);
+        Cursor cursor = database.rawQuery("SELECT a.app_name,a.package_name, a.status,a.staff_id,b.staff_name,a.download_version,a.new_version,a.what_new,b.role,b.hub,a.app_version,b.staff_program FROM es_application_details a JOIN users b on a.staff_id = b.staff_id Where a.staff_id  = \"" + staff_id + "\" and a.status = '1' order by a.app_name asc", null);
 
 
         cursor.moveToFirst();
@@ -548,5 +548,18 @@ public class ControlDB {
         return date;
     }
 
+
+    public String getHubName(String staff_id) {
+        String hub = "";
+        Cursor cursor = database.rawQuery("select hub from users where staff_id = \"" + staff_id + "\" ", null);
+        cursor.moveToFirst();
+
+        while (!cursor.isAfterLast()) {
+            hub = cursor.getString(0);
+            cursor.moveToNext();
+        }
+
+        return hub;
+    }
 
 }

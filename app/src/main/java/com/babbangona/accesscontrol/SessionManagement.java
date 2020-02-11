@@ -84,6 +84,7 @@ public class SessionManagement {
         // user email id
         user.put(KEY_STAFF_ID, pref.getString(KEY_STAFF_ID, "TXX"));
 
+
         user.put(KEY_LOGIN, pref.getString(KEY_LOGIN, "false"));
         user.put(KEY_LAST_SYNCED, pref.getString(KEY_LAST_SYNCED, "2019-03-25 12:00:00"));
         user.put(KEY_TEMPLATE, pref.getString(KEY_TEMPLATE, "0___0"));

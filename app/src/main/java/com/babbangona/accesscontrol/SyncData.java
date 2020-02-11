@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,7 +93,7 @@ public class SyncData {
 
                 String query = builder.build().getEncodedQuery();
                 OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
 
                 writer.write(query);
                 writer.flush();
@@ -255,7 +256,7 @@ public class SyncData {
 
                 String query = builder.build().getEncodedQuery();
                 OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
 
                 writer.write(query);
                 writer.flush();
@@ -411,7 +412,7 @@ public class SyncData {
 
                 String query = builder.build().getEncodedQuery();
                 OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
 
                 writer.write(query);
                 writer.flush();
@@ -586,9 +587,9 @@ public class SyncData {
                 httpURLConnection.setDoInput(true);
 
                 OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
                 String data_string = URLEncoder.encode("wordlist", "UTF-8") + "=" + URLEncoder.encode(WordList, "UTF-8") + "&" +
-                        URLEncoder.encode("versionNo", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(BuildConfig.VERSION_NAME), "UTF-8");
+                        URLEncoder.encode("versionNo", "UTF-8") + "=" + URLEncoder.encode(BuildConfig.VERSION_NAME, "UTF-8");
                 //+URLEncoder.encode("version=", "UTF-8") + "=" + URLEncoder.encode(WordList, "UTF-8");
 
                 bufferedWriter.write(data_string); // writing information to Database
@@ -680,9 +681,9 @@ public class SyncData {
                 httpURLConnection.setDoInput(true);
 
                 OutputStream outputStream = httpURLConnection.getOutputStream();
-                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
+                BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, StandardCharsets.UTF_8));
                 String data_string = URLEncoder.encode("wordlist", "UTF-8") + "=" + URLEncoder.encode(WordList, "UTF-8") + "&" +
-                        URLEncoder.encode("versionNo", "UTF-8") + "=" + URLEncoder.encode(String.valueOf(BuildConfig.VERSION_NAME), "UTF-8");
+                        URLEncoder.encode("versionNo", "UTF-8") + "=" + URLEncoder.encode(BuildConfig.VERSION_NAME, "UTF-8");
                 //+URLEncoder.encode("version=", "UTF-8") + "=" + URLEncoder.encode(WordList, "UTF-8");
 
                 bufferedWriter.write(data_string); // writing information to Database
@@ -786,7 +787,7 @@ public class SyncData {
 
                 String query = builder.build().getEncodedQuery();
                 OutputStream os = conn.getOutputStream();
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8));
 
                 writer.write(query);
                 writer.flush();

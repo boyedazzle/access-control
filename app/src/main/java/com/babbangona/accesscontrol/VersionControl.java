@@ -42,21 +42,21 @@ public class VersionControl extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_version_control);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 
-        recyclerView = (RecyclerView) findViewById(R.id.recylcerView2);
+        recyclerView = findViewById(R.id.recylcerView2);
         tvStatus = findViewById(R.id.tvRecordStatus);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
 
-                AlertDialog.Builder alertDialog = new AlertDialog.Builder((Activity) view.getContext());
+                AlertDialog.Builder alertDialog = new AlertDialog.Builder(view.getContext());
                 alertDialog.setTitle("Access Control");
                 alertDialog.setMessage("");
                 alertDialog.setIcon(R.drawable.component_babbangona_logo);
